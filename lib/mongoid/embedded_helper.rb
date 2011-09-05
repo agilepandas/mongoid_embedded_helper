@@ -32,8 +32,12 @@ module Mongoid
 
     def iterate_collection_stack stack, subject = nil
       collection = subject || self
+      class_name = subject.class.name.downcase
       stack = stack.reverse
       stack.each do |entry|
+        if entry[:collection_name].include?(class_name)
+          entry[:collection_name].gsub!("#{class_name}_", "")
+        end
         sub_collection = collection.send entry[:collection_name]
         index = sub_collection.to_a.index(entry[:object]) if entry != stack.last
         collection = sub_collection[index] if index
