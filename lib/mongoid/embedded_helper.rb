@@ -36,7 +36,7 @@ module Mongoid
       stack = stack.reverse
       stack.each do |entry|
         if entry[:collection_name].include?(class_name)
-          entry[:collection_name] = subject.class.to_s.split("::").last.downcase
+          entry[:collection_name].gsub!("#{class_name}_", "")
         end
         sub_collection = collection.send entry[:collection_name]
         index = sub_collection.to_a.index(entry[:object]) if entry != stack.last
